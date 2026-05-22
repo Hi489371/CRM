@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams, useParams } from 'react-router-dom';
 import { clientService } from '../services';
 import '../styles/Clients.css';
@@ -14,17 +14,7 @@ export const Clients = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  useEffect(() => {
-    const statusParam = searchParams.get('status');
-    if (statusParam) setStatus(statusParam);
-    fetchClients(1);
-  }, [searchParams]);
-
-  useEffect(() => {
-    fetchClients(1);
-  }, [search, status]);
-
-  const fetchClients = async (pageNum) => {
+  const fetchClients = useCallback(async (pageNum) => {
     try {
       setLoading(true);
       const data = await clientService.getClients({
@@ -42,7 +32,17 @@ export const Clients = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [search, status]);
+
+  useEffect(() => {
+    const statusParam = searchParams.get('status');
+    if (statusParam) setStatus(statusParam);
+    fetchClients(1);
+  }, [searchParams, fetchClients]);
+
+  useEffect(() => {
+    fetchClients(1);
+  }, [fetchClients]);
 
   const handleDeleteClient = async (id) => {
     if (window.confirm('Are you sure you want to delete this client?')) {
@@ -166,9 +166,9 @@ export const ClientDetail = () => {
     } else {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, fetchClient]);
 
-  const fetchClient = async () => {
+  const fetchClient = useCallback(async () => {
     try {
       const data = await clientService.getClient(id);
       setClient(data);
@@ -177,7 +177,7 @@ export const ClientDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   const handleSave = async (formData) => {
     try {

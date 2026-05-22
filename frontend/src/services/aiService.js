@@ -332,7 +332,7 @@ export const getAvailableModels = async () => {
 };
 
 // Export all functions
-export default {
+const aiService = {
   findClients,
   verifyClients,
   verifyClient,
@@ -344,3 +344,5 @@ export default {
   generateOutreach,
   getAvailableModels,
 };
+
+export default aiService;

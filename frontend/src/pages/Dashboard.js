@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { clientService, leadService, taskService, dashboardService } from '../services';
+import { dashboardService } from '../services';
 import '../styles/Dashboard.css';
 
 export const Dashboard = () => {

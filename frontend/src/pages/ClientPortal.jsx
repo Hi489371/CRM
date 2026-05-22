@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   getClientPortal,
@@ -30,15 +30,7 @@ const ClientPortal = () => {
   const [schedule, setSchedule] = useState({ name: '', phone: '', preferredTime: '' });
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    loadPortal();
-  }, [token]);
-
-  useEffect(() => {
-    if (chatEndRef.current) chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  }, [chatMessages, chatOpen]);
-
-  const loadPortal = async () => {
+  const loadPortal = useCallback(async () => {
     try {
       setLoading(true);
       const res = await getClientPortal(token);
@@ -49,7 +41,15 @@ const ClientPortal = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    loadPortal();
+  }, [loadPortal]);
+
+  useEffect(() => {
+    if (chatEndRef.current) chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages, chatOpen]);
 
   const handleInterested = async () => {
     setSubmitting(true);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams, useParams } from 'react-router-dom';
 import { leadService } from '../services';
 import LeadDetailView from './LeadDetailView';
@@ -15,17 +15,7 @@ export const Leads = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  useEffect(() => {
-    const statusParam = searchParams.get('status');
-    if (statusParam) setStatus(statusParam);
-    fetchLeads(1);
-  }, [searchParams]);
-
-  useEffect(() => {
-    fetchLeads(1);
-  }, [search, status]);
-
-  const fetchLeads = async (pageNum) => {
+  const fetchLeads = useCallback(async (pageNum) => {
     try {
       setLoading(true);
       const data = await leadService.getLeads({
@@ -43,7 +33,17 @@ export const Leads = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [search, status]);
+
+  useEffect(() => {
+    const statusParam = searchParams.get('status');
+    if (statusParam) setStatus(statusParam);
+    fetchLeads(1);
+  }, [searchParams, fetchLeads]);
+
+  useEffect(() => {
+    fetchLeads(1);
+  }, [fetchLeads]);
 
   const handleDeleteLead = async (id) => {
     if (window.confirm('Are you sure you want to delete this lead?')) {

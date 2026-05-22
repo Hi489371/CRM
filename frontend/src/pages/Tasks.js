@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { taskService } from '../services';
 import '../styles/Tasks.css';
@@ -13,11 +13,7 @@ export const Tasks = () => {
   const [pagination, setPagination] = useState({});
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchTasks(1);
-  }, [status, priority]);
-
-  const fetchTasks = async (pageNum) => {
+  const fetchTasks = useCallback(async (pageNum) => {
     try {
       setLoading(true);
       const data = await taskService.getTasks({
@@ -35,7 +31,11 @@ export const Tasks = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [status, priority]);
+
+  useEffect(() => {
+    fetchTasks(1);
+  }, [fetchTasks]);
 
   const handleDeleteTask = async (id) => {
     if (window.confirm('Are you sure you want to delete this task?')) {
@@ -184,9 +184,9 @@ export const TaskDetail = () => {
     } else {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, fetchTask]);
 
-  const fetchTask = async () => {
+  const fetchTask = useCallback(async () => {
     try {
       const data = await taskService.getTask(id);
       setTask(data);
@@ -195,7 +195,7 @@ export const TaskDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   const handleSave = async (formData) => {
     try {

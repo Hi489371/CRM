@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { leadService } from '../services';
 import {
@@ -34,7 +34,7 @@ export const LeadDetailView = () => {
   const [emailBody, setEmailBody] = useState('');
   const [sending, setSending] = useState(false);
 
-  const fetchLead = async () => {
+  const fetchLead = useCallback(async () => {
     try {
       setLoading(true);
       const data = await leadService.getLead(id);
@@ -47,11 +47,11 @@ export const LeadDetailView = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     if (id && id !== 'new') fetchLead();
-  }, [id]);
+  }, [id, fetchLead]);
 
   const handleStatusChange = async (newStatus) => {
     try {

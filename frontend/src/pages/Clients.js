@@ -160,14 +160,6 @@ export const ClientDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (id && id !== 'new') {
-      fetchClient();
-    } else {
-      setLoading(false);
-    }
-  }, [id, fetchClient]);
-
   const fetchClient = useCallback(async () => {
     try {
       const data = await clientService.getClient(id);
@@ -178,6 +170,14 @@ export const ClientDetail = () => {
       setLoading(false);
     }
   }, [id]);
+
+  useEffect(() => {
+    if (id && id !== 'new') {
+      fetchClient();
+    } else {
+      setLoading(false);
+    }
+  }, [id, fetchClient]);
 
   const handleSave = async (formData) => {
     try {

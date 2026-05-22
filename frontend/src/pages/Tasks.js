@@ -178,14 +178,6 @@ export const TaskDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (id && id !== 'new') {
-      fetchTask();
-    } else {
-      setLoading(false);
-    }
-  }, [id, fetchTask]);
-
   const fetchTask = useCallback(async () => {
     try {
       const data = await taskService.getTask(id);
@@ -196,6 +188,14 @@ export const TaskDetail = () => {
       setLoading(false);
     }
   }, [id]);
+
+  useEffect(() => {
+    if (id && id !== 'new') {
+      fetchTask();
+    } else {
+      setLoading(false);
+    }
+  }, [id, fetchTask]);
 
   const handleSave = async (formData) => {
     try {

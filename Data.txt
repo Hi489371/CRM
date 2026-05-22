@@ -1,0 +1,22 @@
+https://tempomailusa.com/
+
+quhgx68@trashmail.in
+
+
+https://openrouter.ai/workspaces/default/keys
+Medverve@123
+
+
+https://github.com/signup?source=login
+Medverve@123
+
+
+
+# OpenRouter AI Configuration
+OPENROUTER_API_KEY=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
+
+OPENROUTER_API_KEY_FALLBACK=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
+
+
+
+

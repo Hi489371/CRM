@@ -1,0 +1,10 @@
+@import './Clients.css';
+
+.tasks-table,
+.tasks-container {
+  /* Inherits from Clients styles */
+}
+
+@media (max-width: 768px) {
+  /* Responsive styles are inherited from Clients.css */
+}
